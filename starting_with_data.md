@@ -14,7 +14,7 @@ SQL Queries:
         LIMIT 1;
 
 Answer: 
-The visitor who has an Id of 1957460000000000000, unfortunately, I use a mac, and the analytics.csv file is too big for Numbers application on Mac to open, when I open in Excel, Excel automatically rounded this number to 6 sig figs. I tried to solve this problem by joing all_sessions.fullvisitorid = analytics.fullvisitorid:
+The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, and the analytics.csv file is too big for Numbers application on Mac to open, when I open in Excel, Excel automatically rounded this number to 6 sig figs. I tried to solve this problem by joing all_sessions.fullvisitorid = analytics.fullvisitorid:
 
         SELECT
             as.fullvisitoridnew AS fullvisitorid,
@@ -28,6 +28,20 @@ The visitor who has an Id of 1957460000000000000, unfortunately, I use a mac, an
         ORDER BY
             highest_visitnumber DESC
         LIMIT 1;
+
+--Since above didn't work, I added another column in all_sesions table to port in the "visitnumber" from analytics:
+       
+        ALTER TABLE all_sessions
+        ADD COLUMN visitNumber INT;
+
+        UPDATE all_sessions 
+--I've been having issues with alias since day one, but that's okay, I'll just delete the 'as' alias for all_sessions.
+
+        SET visitNumber = a.visitNumber
+        FROM analytics a
+        WHERE all_sessions.fullVisitorId = a.fullVisitorId;
+
+--After adding the column "visitnumber" in, I realized there is another problem, since there are only 534 rows in the all_sessions table, and 34433 rows in the analytics, the PK and FK is different, so I cannot do that. The best result would be my rounded fullvisitorID in the analytics table. I manually looked for 1957460000000000000 and this fullbisitorID doesn't exist in the all_sessions table. There must be some data lost mistake during my cleaning process that I didn't know of.
 
 Question 2: From the sales_report table, find the products skus that has high sold rate, low stock level and a long resctokingleadtime. 
 
