@@ -30,11 +30,13 @@ As complete beginner, I was stupid enough to forget everything I learned in the 
 Day 3-4:
 I realized that I am more confused than the table than learning to write queries. I had to Google some of the columns to find out the meanings, for example, the sentimentscores and ratio. Luckily, this project is supposed to be challenging for us to not have enough time, or else I would defenitely dig in deeper because I got annoyed by the fact that I had to analyze a set of data which I knew nothing of - I would have to practice in the future as well, since this would be my new norm.
 
+Technical Challenges:
+Since I made mistakes in day 1-2 when trying to port in the tables in, I didn't specify the column names and data types correctly. I learned my lessons later, casting and altering my column names and data types, which was an extra thing to do, but good practice for myself.
 
 ## Future Goals
 1. As mentioned above, next time I would want to clean the datas first, since I jumped back and fourth with this one, which was a "waste of time" for my future self. But it was a good practice for now since I enjoyed the debugging process! 
 2. I would have to practice using open sources and online tools more often, other than sweating myself typing & importing queries and datas manually.
 3. My potential errors could be in the "visitId" and "fullvisitorId" columns in the all_sessions and analytics table. I tried my best within the provided time to clean these off a little bit, but I'm still finding my results a bit ambiguous.
 4. I want more time to dig into the "time spent on site", "sentimental scores" and "sentimental magnitude" columns in the sales_report table.
-5. More experience needed for sure, I am only scratching the surface here,I hope that I can have more time, or more relevant examples to look through in the future.
+5. More experience needed for sure, I am only scratching the surface here, I hope that I can have more time, or more relevant examples to look through in the future.
    
