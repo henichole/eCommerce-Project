@@ -46,9 +46,7 @@ SQL Queries:
 
 
 Answer:
-Within the 27 rows of non-null values, average number of products ordered from visitors in each city and country ranged from 1 to 11. The top countries with most visitor orders are the cities from United States and Madrid, Spain(10). Majority of the orders are from cities of the US.
-which add up to around 30 among the cities.
-
+Within the 8 average number of products ordered from visitors in each city and country are 1. The top countries with most visitor orders are United States, India and Mexico, majority of the orders are from US cities.
 
 **Question 3: Is there any pattern in the types (product categories) of products ordered from visitors in each city and country?**
 
@@ -74,15 +72,9 @@ SQL Queries:
 
 Answer:
 The top five product categories are:
-1."Home/Shop by Brand/YouTube/"                                -613 product_category_count
-2."Home/Apparel/Men's/Men's-T-Shirts/"                         -435 product_category_count
-3."Home/Apparel/"                                              -288 product_category_count
-4."Home/Electronics/"                                          -280 product_category_count
-5."Home/Shop by Brand/Google/"                                 -223 product_category_count
-
-Majorities of the visitors are from the US, and according to the cities, since about half of the cities are null, and there are so many 
-product categories, only the major cities in the US standed out with the Youtube purchases. This is an indication of eCommerce gradually shifting from retail to YouTube & Google searches. Other than the basic necessities such as appearels and electronics, influencers from
-YouTube now play a huge role in marketing.
+1. Not set - I should probably clean it
+2.."Home/Apparel/Women's/Women's-T-Shirts/"
+3."Home/Apparel/"
 
 
 **Question 4: What is the top-selling product from each city/country? Can we find any pattern worthy of noting in the products sold?**
@@ -120,10 +112,10 @@ SQL Queries:
 
 Answer:
 The top five star product are:
-"Ballpoint LED Light Pen"                                       456*22 units sold in cities among the countries
-"17oz Stainless Steel Sport Bottle"                             334*15 units sold in cities among the countries
-"Leatherette Journal"                                           319*12 units sold in cities among the countries
-"Foam Can and Bottle Cooler"                                   290*11 units sold in cities among the countries 
+"Ballpoint LED Light Pen"                                       456 units sold in cities among the countries
+"17oz Stainless Steel Sport Bottle"                             334 units sold in cities among the countries
+"Leatherette Journal"                                           319 units sold in cities among the countries
+"Foam Can and Bottle Cooler"                                   290 units sold in cities among the countries 
 
 
 **Question 5: Can we summarize the impact of revenue generated from each city/country?**
@@ -164,22 +156,14 @@ The top five star product are:
     
 Answer: 
 Top Cities
-"San Francisco"
-"Sunnyvale"
-"Atlanta"
-These three cities ranged from 800 to 1500.
-One Non-US city that standed out for me is "Tel Aviv-Yafo" from Israel, since I have all the SUM, AVG, MAX and MIN total_transaction_revenue to look at, this city only has one single transaction of 600. 
-Despite of the usual big percentage of nullality, and abundancies in the US cities (not specified), I noticed that some cities like New York is labelled as "Canada", also, some districts like Shinjuku and Shibuya (in Tokyo) are labelled in the cities column, so I had to fix it.
+"Chicago"
+"Toronto"
+"New York"
 
-Top Countries:
+Top Country:
 "US"
-"Israel"
-"Australia"
-"Canada"
-I didn't count Canada as the third place since "New York" was counted toward Canada, which was incorrect.
 
 
-Overall, the impact of the transaction revenues is the most on the west coast, US, especially cities around the sillicon valley area.
 
 
 
