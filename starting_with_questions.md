@@ -5,6 +5,7 @@ Answer the following questions and provide the SQL queries used to find the answ
 
 
 SQL Queries:
+
             SELECT
                 country,
                 city,
@@ -31,6 +32,7 @@ use the totaltransactionrevenue instead (I will show in the starting_with_data.m
 
 
 SQL Queries:
+
             SELECT 
               country,
               city,
@@ -52,6 +54,7 @@ which add up to around 30 among the cities.
 
 
 SQL Queries:
+
             SELECT
                 country,
                 city,
@@ -86,6 +89,7 @@ YouTube now play a huge role in marketing.
 
 
 SQL Queries:
+
             WITH ranked_products AS (
                 SELECT
                     a.country,
@@ -124,7 +128,8 @@ The top five star product are:
 
 **Question 5: Can we summarize the impact of revenue generated from each city/country?**
 
-SQL Queries attempt 1 via SUM, AVG, MAX, MIN:
+--SQL Queries attempt 1 via SUM, AVG, MAX, MIN:
+
             SELECT
                 country,
                 city,
@@ -141,7 +146,8 @@ SQL Queries attempt 1 via SUM, AVG, MAX, MIN:
                 country,
                 city DESC;
 
-SQL Queries attempt 2 via SUM:
+--SQL Queries attempt 2 via SUM:
+
             SELECT
                 country,
                 city,
