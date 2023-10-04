@@ -3,6 +3,7 @@ What issues will you address by cleaning the data?
 
 2. After cleaning the duplicated rows, I realized that in the sales_by_sku, I have a total of 462 rows, which means I should have 462 unique products as my primary key in sales_by_sku table. However, when I switch to look for the productsku in sales_report, I only see 454. There must be 8 products missing.
 
+3. In analytics table, the visitstarttime column is in a different format, I need to change it.
    
 Queries:
 Below, provide the SQL queries you used to clean your data.
@@ -64,4 +65,34 @@ Below, provide the SQL queries you used to clean your data.
              ('9184677', 0, 0, 0, 0.0, 0.0, 0.0),
              ('GGOEGALJ057912', 0, 0, 0, 0.0, 0.0, 0.0),
              ('GGOEYAXR066128', 0, 0, 0, 0.0, 0.0, 0.0);
+3.
+
+           SELECT 
+	         TO_CHAR(TO_TIMESTAMP(visitStartTime), 'YYYY-MM-DD HH24:MI:SS') 
+	         AS readable_datetime
+	         FROM analytics;
   
+--it worked perfectly fine, however, after I tried to pull the tables out again, the format is still in its original form. I used ALTER:
+  
+           ALTER TABLE analytics
+               ADD COLUMN formatted_visit_start_time TIMESTAMP;
+--However, I pulled the analytics table again, and received error feedback:
+ERROR:  column "formatted_visit_start_time" of relation "analytics" already exists 
+SQL state: 42701
+
+--To prevent further complications, I had to do this:
+
+               UPDATE analytics
+               SET formatted_visit_start_time = TO_TIMESTAMP(visitStartTime);
+               ALTER TABLE analytics
+               
+--Then same logic as deleting the duplicates, I dropped the original column:
+
+               DROP COLUMN visitStartTime;
+               ALTER TABLE analytics
+               RENAME COLUMN formatted_visit_start_time TO visitStartTime;
+               
+--I received error message, unfortunately I decided to redo all the timstamp thing in order to avoid further complications: 
+ERROR:  cached plan must not change result type 
+SQL state: 0A000
+
