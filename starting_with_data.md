@@ -43,12 +43,31 @@ Answer:
 I found 75 productsskus, which can be analyzed by the stake holders to decide whether or not they should restock.
 
 
-Question 3: 
+Question 3: Find the total number of unique visitors by referring sites, find each unique product viewed by each visitor, and compute the percentage of visitors to the site that actually makes a purchase
 
 SQL Queries:
 
+        SELECT
+            channelgrouping,
+            COUNT(DISTINCT fullVisitorId) AS unique_visitors,
+            COUNT(DISTINCT CASE WHEN channelgrouping = 'Referral' THEN fullVisitorId END) AS referral_count
+        FROM
+            analytics
+        GROUP BY
+            channelgrouping;
+        	
 Answer:
+The total number of unique visitors by referring sites is 5928.
+Other types are:
+Organic Search: 18254
+Direct: 5951
+Social: 2551
+Paid Search：1106
+Affiliates：400
+Display：242
+Other：1 
 
+other 2 questions: pending
 
 
 Question 4: In all_session table, change the column with values: "not available in demo dataset" to "null". And try to fix some of the duplicated countries & cities with same IDs (could be any IDs).
