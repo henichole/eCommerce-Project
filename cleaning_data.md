@@ -41,7 +41,7 @@ Below, provide the SQL queries you used to clean your data.
                   DROP TABLE analytics;
                   ALTER TABLE analytics_new RENAME TO analytics;
 
-                  -- I later did the same query with the productSKUs in products(here the column name is                        sku), sales_by_sku and sales_report table.
+-- I later did the same query with the productSKUs in products(here the column name is                        sku), sales_by_sku and sales_report table.
 
 
 2.
@@ -92,7 +92,8 @@ SQL state: 42701
                ALTER TABLE analytics
                RENAME COLUMN formatted_visit_start_time TO visitStartTime;
                
---I received error message, unfortunately I decided to redo all the timstamp thing in order to avoid further complications: 
+--I received error message, unfortunately I decided to undo everything for the timstamp thing in order to avoid further complications, because I need to be able to pull my analytics table.
 ERROR:  cached plan must not change result type 
 SQL state: 0A000
 
+--At this point I am able to pull "visitstarttime" from analytics table individually but couldn't pull the full analytics table out. I guess I should stop here.
