@@ -10,8 +10,6 @@ SQL Queries:
                 country,
                 city,
               	SUM(CAST(transactionrevenue AS integer))
---I later switched transactionrevenue to totaltransactionrevenue.
-
             FROM
                 all_sessions
             where transactionrevenue IS NOT null
