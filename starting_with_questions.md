@@ -10,6 +10,7 @@ SQL Queries:
                 country,
                 city,
               	SUM(CAST(transactionrevenue AS integer))
+--I later switched transactionrevenue to totaltransactionrevenue.
             FROM
                 all_sessions
             where transactionrevenue IS NOT null
@@ -19,12 +20,21 @@ SQL Queries:
             ORDER BY 3
             --indicates the number of column of selected table
                 DESC;
-
+--Only one country returned, I switched the column to totaltransactionrevenue and got 
 
 Answer:
-Since the transactionrevenue has a 99.9% rate of nullality, I checked through the Excel to see what happened. 
-after I cleaned the data, I think the column "transactionrevenue" is not that reliable or relevent. I could 
-use the totaltransactionrevenue instead (I will show in the starting_with_data.md file).
+Since the transactionrevenue has a high nullality, I checked through the Excel to see what happened: I realized that the reason behind it was because a lot of orderids were created without having a transaction revenue. Therefore, I think the column "transactionrevenue" is not that reliable or relevent. I
+use the totaltransactionrevenue instead.
+
+Results:
+country              city              totaltransactionrevenue
+"United States"		                    112.6650000
+"United States"	  "Chicago"	            123.940000
+"Canada"	      "Toronto"	             82.160000
+"United States"	  "New York"	         51.330000
+"United States"	  "Mountain View"    	 43.810000
+"United States"	  "Austin"	             35.780000
+"United States"	  "Columbus"	         21.990000
 
 
 
@@ -47,6 +57,15 @@ SQL Queries:
 
 Answer:
 Within the 8 average number of products ordered from visitors in each city and country are 1. The top countries with most visitor orders are United States, India and Mexico, majority of the orders are from US cities.
+country          city         
+"United States"	"New York"	1.00000000000000000000
+"India"	"Bengaluru"	1.00000000000000000000
+"United States"		1.00000000000000000000
+"United States"	"Detroit"	1.00000000000000000000
+"United States"	"Columbus"	1.00000000000000000000
+"Mexico"		1.00000000000000000000
+"United States"	"Mountain View"	1.00000000000000000000
+"United States"	"Chicago"	1.00000000000000000000
 
 **Question 3: Is there any pattern in the types (product categories) of products ordered from visitors in each city and country?**
 
