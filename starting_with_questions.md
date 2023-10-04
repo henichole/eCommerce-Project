@@ -54,9 +54,7 @@ SQL Queries:
               city
             HAVING AVG(CAST(productQuantity AS numeric)) IS NOT NULL;
 
-
-Answer:
-The average number of products ordered from visitors in each city and country are 1. But I don't feel right about this result, I tried to union the rows with same country and city name, along with the product quantity. 
+--The average number of products ordered from visitors in each city and country are 1. But I don't feel right about this result, I tried to union the rows with same country and city name, along with the product quantity. 
 
             WITH deduplicated_all_sessions AS (
                 SELECT DISTINCT country, city, productQuantity
@@ -74,17 +72,66 @@ The average number of products ordered from visitors in each city and country ar
             HAVING 
                 AVG(CAST(productQuantity AS numeric)) IS NOT NULL;
             
---However, since most of the values under prduct quantity, I need to use total_ordered from sales_report.
+--However, since most of the values under prduct quantity, there is no surprise that I got average order number of 1 for every country. I need to use total_ordered from sales_report using JOIN:
 
-country          city         
-"United States"	"New York"	1.00000000000000000000
-"India"	"Bengaluru"	1.00000000000000000000
-"United States"		1.00000000000000000000
-"United States"	"Detroit"	1.00000000000000000000
-"United States"	"Columbus"	1.00000000000000000000
-"Mexico"		1.00000000000000000000
-"United States"	"Mountain View"	1.00000000000000000000
-"United States"	"Chicago"	1.00000000000000000000
+        WITH deduplicated_all_sessions AS (
+            SELECT DISTINCT country, city, productSKU
+            FROM all_sessions
+        )
+        SELECT 
+            a.country,
+            a.city,
+            AVG(sr.total_ordered) AS avg_products_ordered
+        FROM 
+            deduplicated_all_sessions a
+        JOIN
+            sales_report sr ON a.productSKU = sr.productSKU
+        GROUP BY 
+            a.country, 
+            a.city
+        HAVING 
+            AVG(sr.total_ordered) IS NOT NULL;
+--Here I got 83 rows, I then narrowed down to top 5 US cities:
+
+        WITH deduplicated_all_sessions AS (
+            SELECT DISTINCT country, city, productSKU
+            FROM all_sessions
+        )
+        SELECT 
+            a.country,
+            a.city,
+            AVG(sr.total_ordered) AS avg_products_ordered
+        FROM 
+            deduplicated_all_sessions a
+        JOIN
+            sales_report sr ON a.productSKU = sr.productSKU
+        GROUP BY 
+            a.country, 
+            a.city
+        HAVING 
+            AVG(sr.total_ordered) IS NOT NULL
+        ORDER BY
+            CASE WHEN a.country = 'United States' THEN 1 ELSE 2 END, -- Sort US cities first
+            avg_products_ordered DESC 
+        -- Sort by average products ordered in descending order
+        LIMIT 5
+
+Answer:
+--TOP 5 cities with highest average order numbers, there were all US cities.
+
+"Austin"	169.5000000000000000
+"Kalamazoo"	105.0000000000000000
+"San Antonio"	85.0000000000000000
+"Detroit"	23.0000000000000000
+"Pittsburgh"	19.5000000000000000
+
+I spiced up a little bit with non US cities with a WHERE clause:
+"Kuwait", null,	334.0000000000000000
+"Indonesia", null, 290.0000000000000000
+"Germany", "Hamburg", 189.0000000000000000
+"Japan", "Minato", 78.5000000000000000
+"Germany", null, 56.8000000000000000
+
 
 
 **Question 3: Is there any pattern in the types (product categories) of products ordered from visitors in each city and country?**
