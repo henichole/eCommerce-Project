@@ -5,17 +5,19 @@ Answer the following questions and provide the SQL queries used to find the answ
 
 
 SQL Queries:
-SELECT
-    country,
-    city,
-    SUM(transactionRevenue) AS total_transaction_revenue
-FROM
-    all_sessions
-GROUP BY
-    country,
-    city
-ORDER BY
-    total_transaction_revenue DESC;
+            SELECT
+                country,
+                city,
+              	SUM(CAST(transactionrevenue AS integer))
+            FROM
+                all_sessions
+            where transactionrevenue IS NOT null
+            GROUP BY
+                country,
+                city
+            ORDER BY 3
+            --indicates the number of column of selected table
+                DESC;
 
 
 
@@ -28,20 +30,20 @@ Answer:
 
 
 SQL Queries:
-SELECT
-    country,
-    city,
-    AVG(productQuantity) AS avg_products_ordered
-FROM
-    all_sessions
-GROUP BY
-    country,
-    city;
-
+            SELECT 
+              country,
+              city,
+              AVG(CAST(productQuantity AS numeric)) AS avg_products_ordered
+            FROM 
+              all_sessions
+            GROUP BY 
+              country, 
+              city
+            HAVING AVG(CAST(productQuantity AS numeric)) IS NOT NULL;
 
 
 Answer:
-
+            Within the 27 rows of non-null values, average number of products ordered from visitors in each city             and country ranged from 1 to 11. The top countries with most visitor orders are the United States                and Spain. Majority of the orders are from cities of the US.
 
 
 
