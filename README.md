@@ -22,6 +22,8 @@ Wrap up with some issues.
 3. The city that had the highest average of orders is Austin, Kalamazoo and San Antonio.
 4. The city that made the most money in transaction revenue was Chicago US and Toronto CA, but since there are a lot of null values in the US, the results could be incorrect.
 5. The top five selling products are ballpoint LED Light Pen, 17oz Stainless Steel Sport Bottle, Leatherette Journal, Spiral Journal with Pen and Foam Can and Bottle Cooler.
+6. I do not find a correlation between the unique "fullvisitorId" versus the "productviewed" and "totaltransactionrevenue" columns, since most the of the "transactionrevenue" and "totaltransactionrevenue" columns are missing values from the dataset, according to starting_with_data file.
+7. I found 15 products with identical sentiment score of 0.9 and sentiment magnitude of 1.4: Some of these are listed below: "Recycled Paper Journal Set" "Women's Long Sleeve Blended Cardigan Charcoal".
 
 ## Challenges 
 Day 1-2:
