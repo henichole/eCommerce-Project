@@ -86,31 +86,31 @@ YouTube now play a huge role in marketing.
 
 
 SQL Queries:
-WITH ranked_products AS (
-    SELECT
-        a.country,
-        a.city,
-        p.name AS top_selling_product,
-        p.SKU,
-        s.total_ordered,
-        ROW_NUMBER() OVER (PARTITION BY a.country, a.city ORDER BY s.total_ordered DESC) AS sales_rank
-    FROM
-        all_sessions a
-    JOIN
-        sales_by_sku s ON a.productSKU = s.productSKU
-    JOIN
-        products p ON a.productSKU = p.SKU
-)
-SELECT
-    country,
-    city,
-    top_selling_product,
-    SKU,
-    total_ordered AS units_ordered
-FROM
-    ranked_products
-WHERE
-    sales_rank = 1;
+            WITH ranked_products AS (
+                SELECT
+                    a.country,
+                    a.city,
+                    p.name AS top_selling_product,
+                    p.SKU,
+                    s.total_ordered,
+                    ROW_NUMBER() OVER (PARTITION BY a.country, a.city ORDER BY s.total_ordered DESC) AS sales_rank
+                FROM
+                    all_sessions a
+                JOIN
+                    sales_by_sku s ON a.productSKU = s.productSKU
+                JOIN
+                    products p ON a.productSKU = p.SKU
+            )
+            SELECT
+                country,
+                city,
+                top_selling_product,
+                SKU,
+                total_ordered AS units_ordered
+            FROM
+                ranked_products
+            WHERE
+                sales_rank = 1;
 
 
 
@@ -124,26 +124,57 @@ The top five star product are:
 
 **Question 5: Can we summarize the impact of revenue generated from each city/country?**
 
-SQL Queries:
-SELECT
-    country,
-    city,
-    SUM(transactionRevenue) AS total_transaction_revenue,
-    AVG(transactionRevenue) AS avg_transaction_revenue,
-    MAX(transactionRevenue) AS max_transaction_revenue,
-    MIN(transactionRevenue) AS min_transaction_revenue
-FROM
-    all_sessions
-GROUP BY
-    country,
-    city
-ORDER BY
-    country,
-    city;
+SQL Queries attempt 1 via SUM, AVG, MAX, MIN:
+            SELECT
+                country,
+                city,
+                SUM(CAST(totalTransactionRevenue AS NUMERIC)) AS total_transaction_revenue,
+                AVG(CAST(totalTransactionRevenue AS NUMERIC)) AS avg_transaction_revenue,
+                MAX(CAST(totalTransactionRevenue AS NUMERIC)) AS max_transaction_revenue,
+                MIN(CAST(totalTransactionRevenue AS NUMERIC)) AS min_transaction_revenue
+            FROM
+                all_sessions
+            GROUP BY
+                country,
+                city
+            ORDER BY
+                country,
+                city DESC;
+
+SQL Queries attempt 2 via SUM:
+            SELECT
+                country,
+                city,
+                SUM(CAST(totalTransactionRevenue AS NUMERIC)) AS total_revenue 
+            FROM
+                all_sessions
+            GROUP BY
+                country,
+                city
+            ORDER BY
+            	country,
+                total_revenue DESC;
+
+    
+Answer: 
+Top Cities
+"San Francisco"
+"Sunnyvale"
+"Atlanta"
+These three cities ranged from 800 to 1500.
+One Non-US city that standed out for me is "Tel Aviv-Yafo" from Israel, since I have all the SUM, AVG, MAX and MIN total_transaction_revenue to look at, this city only has one single transaction of 600. 
+Despite of the usual big percentage of nullality, and abundancies in the US cities (not specified), I noticed that some cities like New York is labelled as "Canada", also, some districts like Shinjuku and Shibuya (in Tokyo) are labelled in the cities column, so I had to fix it.
+
+Top Countries:
+"US"
+"Israel"
+"Australia"
+"Canada"
+I didn't count Canada as the third place since "New York" was counted toward Canada, which was incorrect.
 
 
+Overall, the impact of the transaction revenues is the most on the west coast, US, especially cities around the sillicon valley area.
 
-Answer:
 
 
 
