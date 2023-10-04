@@ -1,5 +1,6 @@
 Question 1: 
 What is fullVisitorID with the highest visitNumber:
+
 SQL Queries:
 
         SELECT
