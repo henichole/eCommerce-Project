@@ -20,10 +20,8 @@ SQL Queries:
                 DESC;
 
 
-
 Answer:
-
-
+Since the transactionrevenue has a 99.9% rate of nullality, I checked through the Excel to see what happened. When I use the filter function, 
 
 
 **Question 2: What is the average number of products ordered from visitors in each city and country?**
@@ -43,9 +41,7 @@ SQL Queries:
 
 
 Answer:
-            Within the 27 rows of non-null values, average number of products ordered from visitors in each city             and country ranged from 1 to 11. The top countries with most visitor orders are the United States                and Spain. Majority of the orders are from cities of the US.
-
-
+Within the 27 rows of non-null values, average number of products ordered from visitors in each city             and country ranged from 1 to 11. The top countries with most visitor orders are the United States                and Spain. Majority of the orders are from cities of the US.
 
 
 **Question 3: Is there any pattern in the types (product categories) of products ordered from visitors in each city and country?**
