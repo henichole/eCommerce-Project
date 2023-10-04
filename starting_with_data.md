@@ -99,14 +99,14 @@ There are duplications in the names of the product, so I figured this might be d
 
 
 
-Question 3: Find the total number of unique visitors by referring sites, find each unique product viewed by each visitor, and compute the percentage of visitors to the site that actually makes a purchase
+Question 3: Find the total number of unique visitors by referring sites. Find each unique product viewed by each visitor, and compute the percentage of visitors to the site that actually makes a purchase
 
 SQL Queries:
 
         SELECT
             channelgrouping,
             COUNT(DISTINCT fullVisitorId) AS unique_visitors,
-            COUNT(DISTINCT CASE WHEN channelgrouping = 'Referral' THEN fullVisitorId END) AS referral_count
+            COUNT(DISTINCT CASE WHEN channelgrouping = 'Referral' THEN     fullVisitorId END) AS referral_count
         FROM
             analytics
         GROUP BY
@@ -123,11 +123,39 @@ Affiliates：400
 Display：242
 Other：1 
 
-other 2 questions: pending
+For the second question, I used array to find each unique ID with the product viewed:
 
+        WITH unique_products_per_visitor AS (
+            SELECT
+                fullVisitorId,
+                productSKU,
+                COUNT(DISTINCT productSKU) AS unique_product_count
+            FROM
+                all_sessions
+            GROUP BY
+                fullVisitorId, productSKU
+        )
+        SELECT
+            fullVisitorId,
+            ARRAY_AGG(DISTINCT productSKU) AS viewed_products
+        FROM
+            unique_products_per_visitor
+        GROUP BY
+            fullVisitorId;
+
+Answer:
+The query returned with 534 rows with fullvisitorId and viewed_products. For the last part, I do not think the percentage is worth finding because due to the data quality, most of the totaltransactionrevenue are null. I used this query to find the fullvisitorId with non null values of totaltransactionrevenue:
+
+        SELECT 
+                DISTINCT fullvisitorid
+        FROM 
+                all_sessions
+        WHERE 
+                totaltransactionrevenue is not null
+Answer:
+The query returend with only 11 rows, which matched with my hypothesis, there is no point of finding the percentages using this way. I would have to dig deeper into the visitstarttime,timeonsite and total_ordered columns to find out. This is not a good question for this particular data set.
 
 Question 4: In all_session table, change the column with values: "not available in demo dataset" to "null". And try to fix some of the duplicated countries & cities with same IDs (could be any IDs).
-
 
 SQL Queries:
 
@@ -137,7 +165,6 @@ SQL Queries:
 
 Answer:
 The query did work and I changed every "not available in demo dataset" into "null".
-
 
 
 Question 5: Find the productsku and product name with the best sentiment score and sentiment magnitude. And analyze if there is anything worth noting.
@@ -169,6 +196,8 @@ I found 15 products with identical sentiment score of 0.9 and sentiment magnitud
 Some of these are listed below:
 "Recycled Paper Journal Set"
 "Women's Long Sleeve Blended Cardigan Charcoal"
+
+Since both sentiment score and sentiment magnitude is 1.4, I don't see a correlation nor trend in my question. 0.9 and 1.4 were at an average performance, according to open source results.
 "Tri-blend Hoodie Grey"
 "Infant Short Sleeve Tee Royal Blue"
 " Men's Short Sleeve Hero Tee Charcoal"
