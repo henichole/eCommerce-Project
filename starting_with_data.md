@@ -94,6 +94,7 @@ SQL Queries:
         WHERE city = 'not available in demo dataset';
 
 Answer:
+The query did work and I changed every "not available in demo dataset" into "null".
 
 
 
