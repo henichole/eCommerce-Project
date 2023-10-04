@@ -125,7 +125,32 @@ Answer:
 "Detroit"	23.0000000000000000
 "Pittsburgh"	19.5000000000000000
 
-I spiced up a little bit with non US cities with a WHERE clause:
+--I spiced up a little bit with non US cities with a WHERE clause:
+
+        WITH deduplicated_all_sessions AS (
+            SELECT DISTINCT country, city, productSKU
+            FROM all_sessions
+        )
+        SELECT 
+            a.country,
+            a.city,
+            AVG(sr.total_ordered) AS avg_products_ordered
+        FROM 
+            deduplicated_all_sessions a
+        JOIN
+            sales_report sr ON a.productSKU = sr.productSKU
+        WHERE 
+            a.country != 'United States' -- Exclude US cities
+        GROUP BY 
+            a.country, 
+            a.city
+        HAVING 
+            AVG(sr.total_ordered) IS NOT NULL
+        ORDER BY
+            avg_products_ordered DESC
+        LIMIT 5; -- Limit to top 5 non-US cities
+        
+Top 5 cities, non US with highest average order number:
 "Kuwait", null,	334.0000000000000000
 "Indonesia", null, 290.0000000000000000
 "Germany", "Hamburg", 189.0000000000000000
@@ -162,7 +187,7 @@ The top five product categories are:
 2. "Home/Apparel/Women's/Women's-T-Shirts/"
 3. "Home/Apparel/"
 
-Trends I see: For major cities in US and Canada, Home/Apparel is the most popular product category.
+Trends I see: For major cities in US and Canada, Home/Apparel is the most popular product category. However this one I don't see I did a good job, there must be something in the data cleaning process that I missed. Or, by all good means, if I did good enough, it's just the data to blame, since there are too many product categories.
 
 
 **Question 4: What is the top-selling product from each city/country? Can we find any pattern worthy of noting in the products sold?**
@@ -226,20 +251,22 @@ The top five star product are:
                 country,
                 city DESC;
 
---SQL Queries attempt 2 via SUM:
+--SQL Queries attempt 2 via SUM, I also forget to divide by 1000000:
 
             SELECT
                 country,
                 city,
-                SUM(CAST(totalTransactionRevenue AS NUMERIC)) AS total_revenue 
+                SUM(CASE WHEN totalTransactionRevenue IS NOT NULL THEN CAST(totalTransactionRevenue AS NUMERIC)                     / 1000000 ELSE 0 END) AS total_revenue_in_new
             FROM
                 all_sessions
+            WHERE
+                totalTransactionRevenue IS NOT NULL
             GROUP BY
                 country,
                 city
             ORDER BY
-            	country,
-                total_revenue DESC;
+                country,
+                total_revenue_in_new DESC;
 
     
 Answer: 
@@ -250,6 +277,7 @@ Top Cities
 
 Top Country:
 "US"
+            
 
 
 
