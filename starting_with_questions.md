@@ -11,6 +11,7 @@ SQL Queries:
                 city,
               	SUM(CAST(transactionrevenue AS integer))
 --I later switched transactionrevenue to totaltransactionrevenue.
+
             FROM
                 all_sessions
             where transactionrevenue IS NOT null
@@ -20,6 +21,7 @@ SQL Queries:
             ORDER BY 3
             --indicates the number of column of selected table
                 DESC;
+                
 --Only one country returned, I switched the column to totaltransactionrevenue and got 
 
 Answer:
@@ -67,6 +69,7 @@ country          city
 "United States"	"Mountain View"	1.00000000000000000000
 "United States"	"Chicago"	1.00000000000000000000
 
+
 **Question 3: Is there any pattern in the types (product categories) of products ordered from visitors in each city and country?**
 
 
@@ -87,13 +90,15 @@ SQL Queries:
                 country,
                 city,
                 product_category_count DESC;
-                --I noted any of these three conditions to filter out the product_category_count.
+--I noted any of these three conditions to filter out the product_category_count.
 
 Answer:
 The top five product categories are:
-1. Not set - I should probably clean it
-2.."Home/Apparel/Women's/Women's-T-Shirts/"
-3."Home/Apparel/"
+1. Not set 
+2. "Home/Apparel/Women's/Women's-T-Shirts/"
+3. "Home/Apparel/"
+
+Trends I see: For major cities in US and Canada, Home/Apparel is the most popular product category.
 
 
 **Question 4: What is the top-selling product from each city/country? Can we find any pattern worthy of noting in the products sold?**
