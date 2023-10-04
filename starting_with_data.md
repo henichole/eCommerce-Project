@@ -32,15 +32,21 @@ The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, 
 
 --Since above didn't work, I added another column in all_sesions table to port in the "visitnumber" from analytics:
        
-        ALTER TABLE all_sessions
-        ADD COLUMN visitNumber INT;
+        ALTER TABLE 
+                all_sessions
+        ADD COLUMN 
+                visitNumber INT;
 
-        UPDATE all_sessions 
+        UPDATE 
+                all_sessions 
 --I've been having issues with alias since day one, but that's okay, I'll just delete the 'as' alias for all_sessions.
 
-        SET visitNumber = a.visitNumber
-        FROM analytics a
-        WHERE all_sessions.fullVisitorId = a.fullVisitorId;
+        SET 
+                visitNumber = a.visitNumber
+        FROM 
+                analytics a
+        WHERE 
+                all_sessions.fullVisitorId = a.fullVisitorId;
 
 --After adding the column "visitnumber" in, I realized there is another problem, since there are only 534 rows in the all_sessions table, and 34433 rows in the analytics, the PK and FK is different, so I cannot do that. The best result would be my rounded fullvisitorID in the analytics table. I manually looked for 1957460000000000000 and this fullbisitorID doesn't exist in the all_sessions table. There must be some data lost mistake during my cleaning process that I didn't know of.
 
@@ -48,14 +54,49 @@ Question 2: From the sales_report table, find the products skus that has high so
 
 SQL Queries:
 
-        SELECT productSKU
-        FROM sales_report
-        WHERE total_ordered > 10 
-        AND stocklevel > 0
-        AND restockingLeadTime > 1;
+        SELECT 
+                productSKU
+        FROM 
+                sales_report
+        WHERE 
+                total_ordered > 10 
+        AND 
+                stocklevel > 0
+        AND 
+                restockingLeadTime > 1;
+                
+-I further narrowed it down to ASC order of stocklevel, and DESC order of restockingleadtime
+
+        SELECT 
+                productSKU, stocklevel, restockingleadtime
+        FROM 
+                sales_report
+        WHERE 
+                total_ordered > 10 
+        AND 
+                stocklevel > 0
+        AND 
+                restockingLeadTime > 1
+        ORDER BY 
+        	stocklevel asc,
+        	restockingleadtime
+        LIMIT 8;
 
 Answer:
-I found 75 productsskus, which can be analyzed by the stake holders to decide whether or not they should restock.
+I found the 8 products that has a total ordered number bigger than 10, a stocklevel less than 100, and a relatively longer restockingleadtime, which can be analyzed by the stake holders to decide whether or not they should restock. These items are then found using the query:
+
+        SELECT 
+                name, 
+        FROM 
+                sales_report
+        WHERE 
+                productSKU IN ('GGOEGAAX0106', 'GGOEYAAJ033015', 'GGOEGAEJ031315', 'GGOEYAAJ033014',                             'GGOEGAAX0330', 'GGOEGAAL010616', 'GGOEGAAX0620', 'GGOEGAAL010614');
+
+Answers:
+The items are " Men's 100% Cotton Short Sleeve Hero Tee Navy", " Men's Long & Lean Tee Charcoal", " Infant Short Sleeve Tee Green" and " Tri-blend Hoodie Grey". 
+
+There are duplications in the names of the product, so I figured this might be due to productvariant (sizing) column in the all_sessions table. I checked the all_sessions table and found most of the values in the productvariant columns were also null. Therefore, I decided to leave it there since I don't want to join potential products in different sizing.
+
 
 
 Question 3: Find the total number of unique visitors by referring sites, find each unique product viewed by each visitor, and compute the percentage of visitors to the site that actually makes a purchase
