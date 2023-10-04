@@ -50,7 +50,7 @@ The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, 
 
 --After adding the column "visitnumber" in, I realized there is another problem, since there are only 534 rows in the all_sessions table, and 34433 rows in the analytics, the PK and FK is different, so I cannot do that. The best result would be my rounded fullvisitorID in the analytics table. I manually looked for 1957460000000000000 and this fullbisitorID doesn't exist in the all_sessions table. There must be some data lost mistake during my cleaning process that I didn't know of.
 
-Question 2: From the sales_report table, find the products skus that has high sold rate, low stock level and a long resctokingleadtime. 
+Question 2: From the sales_report table, find the products skus that has high sold rate, low stock level and a long restockingleadtime. 
 
 SQL Queries:
 
