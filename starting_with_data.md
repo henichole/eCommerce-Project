@@ -43,7 +43,7 @@ Answer:
 I found 75 productsskus, which can be analyzed by the stake holders to decide whether or not they should restock.
 
 
-Question 3: Find the top products with good sentimental magnitude and sentimentscore, then relate the product to the product category.
+Question 3: 
 
 SQL Queries:
 
@@ -64,8 +64,35 @@ Answer:
 
 
 
-Question 5: Find the productsku and product name with the best 3 sentiment score and sentiment magnitude.
+Question 5: Find the productsku and product name with the best sentiment score and sentiment magnitude. And analyze if there is anything worth noting.
 
 SQL Queries:
 
-Answer:
+        WITH ranked_products AS (
+    SELECT
+        productSKU,
+        name,
+        sentimentScore,
+        sentimentMagnitude,
+        RANK() OVER (ORDER BY sentimentScore DESC, sentimentMagnitude DESC) AS score_rank
+    FROM
+        sales_report
+        )
+        SELECT
+            productSKU,
+            name,
+            sentimentScore,
+            sentimentMagnitude
+        FROM
+            ranked_products
+        WHERE
+            score_rank <= 3;
+
+Answer: 
+I found 15 products with identical sentiment score of 0.9 and sentiment magnitude of 1.4:
+Some of these are listed below:
+"Recycled Paper Journal Set"
+"Women's Long Sleeve Blended Cardigan Charcoal"
+"Tri-blend Hoodie Grey"
+"Infant Short Sleeve Tee Royal Blue"
+" Men's Short Sleeve Hero Tee Charcoal"
