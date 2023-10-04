@@ -24,7 +24,7 @@ SQL Queries:
 
 Answer:
 Since the transactionrevenue has a high nullality, I checked through the Excel to see what happened: I realized that the reason behind it was because a lot of orderids were created without having a transaction revenue. Therefore, I think the column "transactionrevenue" is not that reliable or relevent. I
-use the totaltransactionrevenue instead.
+use the totaltransactionrevenue instead and got a list of 6 cities from US and Canada, the top one is US, since a lot of the cities were missing, so it is a total of all null cities in the US.
 
 Results:
 country              city              totaltransactionrevenue
@@ -56,7 +56,26 @@ SQL Queries:
 
 
 Answer:
-Within the 8 average number of products ordered from visitors in each city and country are 1. The top countries with most visitor orders are United States, India and Mexico, majority of the orders are from US cities.
+The average number of products ordered from visitors in each city and country are 1. But I don't feel right about this result, I tried to union the rows with same country and city name, along with the product quantity. 
+
+            WITH deduplicated_all_sessions AS (
+                SELECT DISTINCT country, city, productQuantity
+                FROM all_sessions
+            )
+            SELECT 
+                country,
+                city,
+                AVG(CAST(productQuantity AS numeric)) AS avg_products_ordered
+            FROM 
+                deduplicated_all_sessions
+            GROUP BY 
+                country, 
+                city
+            HAVING 
+                AVG(CAST(productQuantity AS numeric)) IS NOT NULL;
+            
+--However, since most of the values under prduct quantity, I need to use total_ordered from sales_report.
+
 country          city         
 "United States"	"New York"	1.00000000000000000000
 "India"	"Bengaluru"	1.00000000000000000000
