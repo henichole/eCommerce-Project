@@ -11,7 +11,6 @@ for the total revenue, a lot of the totaltransactionrevenue, transactions, names
 and visitID(10 digits ID number). I joined values in different columns from different tables that are the same.
 found out that the top customer with visitID is 
 
-
 Queries:
 Below, provide the SQL queries you used to clean your data.
 SQL1:
