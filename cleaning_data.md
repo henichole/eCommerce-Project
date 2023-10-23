@@ -1,9 +1,9 @@
 What issues will you address by cleaning the data?
-1. I recognized the duplications present in the tables, visitorId, fullVisitorId and ProductSKU. First, I pulled the table out to identify them, then created new table with unique values, and I narrowed the rows down.
+I identified duplications in the tables, specifically in the columns visitorId, fullVisitorId, and ProductSKU. To address this issue, I initially extracted the table to pinpoint these duplicates. Subsequently, I created a new table containing only unique values and filtered down the rows.
 
-2. After cleaning the duplicated rows, I realized that in the sales_by_sku, I have a total of 462 rows, which means I should have 462 unique products as my primary key in sales_by_sku table. However, when I switch to look for the productsku in sales_report, I only see 454. There must be 8 products missing.
+After removing the duplicated rows, I noticed that in the sales_by_sku table, there were a total of 462 rows. This implied that there should be 462 unique products serving as the primary key in the sales_by_sku table. However, when I checked the productsku in the sales_report, I only found 454 unique products. This suggests that there are 8 products missing.
 
-3. In analytics table, the visitstarttime column is in a different format, I need to change it.
+In the analytics table, I observed that the visitstarttime column was in a different format, necessitating a format change.
    
 Queries:
 Below, provide the SQL queries you used to clean your data.
@@ -20,7 +20,7 @@ Below, provide the SQL queries you used to clean your data.
                       COUNT(*) > 1;
 
                   
--- I use this code to pull out the duplications that I need to clean. I did this with the fullvisitorId in all_sessions table as well. After this step, I created another table with DISTINCT, and deleted the        repeating rows of visitId from 1000000+ to 37887 rows in the analytics.
+--I utilized the following code to identify and extract the duplications that required cleaning. I performed a similar operation with the fullVisitorId in the all_sessions table. Subsequently, I created another table using the DISTINCT keyword and eliminated the redundant rows, reducing the visitId entries from over 1,000,000 to 37,887 rows in the analytics table.
 
                   CREATE TABLE analytics_new AS
                   SELECT DISTINCT ON (visitId) *
@@ -47,11 +47,11 @@ Below, provide the SQL queries you used to clean your data.
                   ALTER TABLE 
 		  	analytics_new RENAME TO analytics;
 
--- Lastly, I did the same query with the productSKUs in products(here the column name is                        sku), sales_by_sku and sales_report tables.
+-- Finally, I executed the same query on the productSKUs, where the column name is 'sku,' in the products, sales_by_sku, and sales_report tables.
 
 
 2.
---First, I pulled out the missing 8 values from the sales_by_sku table:--
+--Initially, I extracted the missing 8 values from the sales_by_sku table:
    
 		SELECT
 			DISTINCT sbs.productSKU
@@ -62,7 +62,7 @@ Below, provide the SQL queries you used to clean your data.
 		WHERE
   			sr.productSKU IS NULL;
    
---After I have retrieved these values, I used INSERT to put these 8 values into the sales_report table: I put 0s in so that I don't change the other column values, after this, I pulled the full sales_report again, it seems to work, but I don't have time to check. If I made a mistake, I might want to change the zeroes to NULL. Help me to pick the correct answer (or else) if I'm wrong, I'm really curious!
+--After retrieving these values, I used the INSERT statement to add these 8 values to the sales_report table. I inserted 0s to avoid altering the values in the other columns. Following this, I pulled the full sales_report dataset again. If there was an error or mistake, and you are unsure, you might consider changing the zeroes back to NULL. Reviewing the data and ensuring its accuracy is a good practice. If you suspect any issues or discrepancies, it's a good idea to verify the data to maintain data integrity.
    
             INSERT INTO 
 	    	sales_report (productSKU, total_ordered, stockLevel, restockingLeadTime, sentimentScore,                 	sentimentMagnitude, ratio)
@@ -85,7 +85,9 @@ Below, provide the SQL queries you used to clean your data.
 	    FROM
                 analytics;
   
---It worked perfectly fine, however, after I tried to pull the tables out again, the format is still in its original form. I used ALTER:
+--It's great to hear that your previous steps worked perfectly. If you used the ALTER statement to change the format of the table but didn't see the expected changes, you might want to double-check the syntax and make sure the ALTER statement was executed correctly. Ensure that you specified the column and the new format correctly in your ALTER statement.
+
+If you encounter any issues or if you'd like to share the specific ALTER statement you used, I can help you further in diagnosing the problem or suggesting a solution.
   
            ALTER TABLE analytics
                ADD COLUMN formatted_visit_start_time TIMESTAMP;
@@ -94,22 +96,22 @@ Below, provide the SQL queries you used to clean your data.
 ERROR:  column "formatted_visit_start_time" of relation "analytics" already exists 
 SQL state: 42701
 
---To prevent further complications, I had to do this:
+--To prevent further complications, do this:
 
                UPDATE analytics
                SET formatted_visit_start_time = TO_TIMESTAMP(visitStartTime);
                ALTER TABLE analytics
                
---Then same logic as deleting the duplicates, I dropped the original column:
+--Drop the original column:
 
                DROP COLUMN visitStartTime;
                ALTER TABLE analytics
                RENAME COLUMN formatted_visit_start_time TO visitStartTime;
                
---I received error message, unfortunately I decided to undo everything for the timstamp thing in order to avoid further complications, because I need to be able to pull my analytics table.
+--I received an error message. Unfortunately, I decided to revert all the changes related to the timestamp to prevent further complications, as I need to be able to retrieve my analytics table.
 ERROR:  cached plan must not change result type 
 SQL state: 0A000
 
---At this point I am able to pull "visitstarttime" from analytics table individually but couldn't pull the full analytics table out. I guess I should stop here.
+--At this point, I can retrieve "visitstarttime" from the analytics table individually, but I'm encountering difficulties when trying to extract the entire analytics table. I believe it might be best to halt further attempts for now.
 
 --Update on Oct 4t: The timestamp is showing in its correct format today, good news.
