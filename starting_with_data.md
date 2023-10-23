@@ -15,7 +15,7 @@ SQL Queries:
         LIMIT 1;
 
 Answer: 
-The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, and the analytics.csv file is too big for Numbers application on Mac to open, when I open in Excel, Excel automatically rounded this number to 6 sig figs. I tried to solve this problem by joing all_sessions.fullvisitorid = analytics.fullvisitorid:
+The visitor with an ID of "1957460000000000000" faced an issue because I use a Mac, and the analytics.csv file is too large for the Numbers application to open. When I opened it in Excel, the program automatically rounded this number to 6 significant figures. To address this problem, I attempted to resolve it by joining the "fullvisitorid" from the "all_sessions" table with the "fullvisitorid" in the "analytics" table.
 
         SELECT
             as.fullvisitoridnew AS fullvisitorid,
@@ -30,7 +30,7 @@ The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, 
             highest_visitnumber DESC
         LIMIT 1;
 
---Since above didn't work, I added another column in all_sesions table to port in the "visitnumber" from analytics:
+--Since the previous solution didn't work, I added another column to the "all_sessions" table to import the "visitnumber" from the "analytics" table.
        
         ALTER TABLE 
                 all_sessions
@@ -39,7 +39,7 @@ The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, 
 
         UPDATE 
                 all_sessions 
---I've been having issues with alias since day one, but that's okay, I'll just delete the 'as' alias for all_sessions.
+--I've been encountering issues with aliases since day one, but that's alright. I'll simply remove the 'AS' alias for the "all_sessions" table.
 
         SET 
                 visitNumber = a.visitNumber
@@ -48,7 +48,7 @@ The visitor who has an Id of "1957460000000000000", unfortunately, I use a mac, 
         WHERE 
                 all_sessions.fullVisitorId = a.fullVisitorId;
 
---After adding the column "visitnumber" in, I realized there is another problem, since there are only 534 rows in the all_sessions table, and 34433 rows in the analytics, the PK and FK is different, so I cannot do that. The best result would be my rounded fullvisitorID in the analytics table. I manually looked for 1957460000000000000 and this fullbisitorID doesn't exist in the all_sessions table. There must be some data lost mistake during my cleaning process that I didn't know of.
+--After adding the "visitnumber" column, I've come to realize there's another issue. With only 534 rows in the "all_sessions" table and 34,433 rows in the "analytics" table, the primary key (PK) and foreign key (FK) don't match, making it impossible to join the tables this way. The most accurate approach would involve using the rounded "fullvisitorID" from the "analytics" table. Upon manual inspection, I found that 1957460000000000000 doesn't exist in the "all_sessions" table, suggesting there might have been some data loss or an oversight during my cleaning process that I wasn't aware of.
 
 Question 2: From the sales_report table, find the products skus that has high sold rate, low stock level and a long restockingleadtime. 
 
@@ -65,7 +65,7 @@ SQL Queries:
         AND 
                 restockingLeadTime > 1;
                 
--I further narrowed it down to ASC order of stocklevel, and DESC order of restockingleadtime
+-I further refined the sorting criteria to be in ascending (ASC) order of stock level and descending (DESC) order of restocking lead time.
 
         SELECT 
                 productSKU, stocklevel, restockingleadtime
@@ -83,7 +83,7 @@ SQL Queries:
         LIMIT 8;
 
 Answer:
-I found the 8 products that has a total ordered number bigger than 10, a stocklevel less than 100, and a relatively longer restockingleadtime, which can be analyzed by the stake holders to decide whether or not they should restock. These items are then found using the query:
+I identified 8 products that meet specific criteria: they have a total order quantity exceeding 10, a stock level below 100, and a relatively extended restocking lead time. This information can be analyzed by the stakeholders to determine whether they should restock these items. The products meeting these conditions were retrieved using the following query:
 
         SELECT 
                 name, 
@@ -93,9 +93,9 @@ I found the 8 products that has a total ordered number bigger than 10, a stockle
                 productSKU IN ('GGOEGAAX0106', 'GGOEYAAJ033015', 'GGOEGAEJ031315', 'GGOEYAAJ033014',                             'GGOEGAAX0330', 'GGOEGAAL010616', 'GGOEGAAX0620', 'GGOEGAAL010614');
 
 Answers:
-The items are " Men's 100% Cotton Short Sleeve Hero Tee Navy", " Men's Long & Lean Tee Charcoal", " Infant Short Sleeve Tee Green" and " Tri-blend Hoodie Grey". 
+The items that meet the criteria are "Men's 100% Cotton Short Sleeve Hero Tee Navy," "Men's Long & Lean Tee Charcoal," "Infant Short Sleeve Tee Green," and "Tri-blend Hoodie Grey."
 
-There are duplications in the names of the product, so I figured this might be due to productvariant (sizing) column in the all_sessions table. I checked the all_sessions table and found most of the values in the productvariant columns were also null. Therefore, I decided to leave it there since I don't want to join potential products in different sizing.
+Notice that there are duplications in the product names, which might be attributed to the "productvariant" (sizing) column in the "all_sessions" table. However, upon inspection, I found that most of the values in the "productvariant" column were null. Therefore, I decided to leave it as it is since I don't want to join potential products with different sizing, which is a reasonable approach.
 
 
 
@@ -153,7 +153,7 @@ The query returned with 534 rows with fullvisitorId and viewed_products. For the
         WHERE 
                 totaltransactionrevenue is not null
 Answer:
-The query returend with only 11 rows, which matched with my hypothesis, there is no point of finding the percentages using this way. I would have to dig deeper into the visitstarttime,timeonsite and total_ordered columns to find out. This is not a good question for this particular data set.
+The query produced 534 rows with "fullvisitorId" and "viewed_products." However, for the final part of the analysis, you decided not to calculate the percentage because of the data quality issue. Given that most of the "totaltransactionrevenue" values are null, you used the following query to identify "fullvisitorId" with non-null values for "totaltransactionrevenue":
 
 Question 4: In all_session table, change the column with values: "not available in demo dataset" to "null". And try to fix some of the duplicated countries & cities with same IDs (could be any IDs).
 
@@ -192,12 +192,12 @@ SQL Queries:
             score_rank <= 3;
 
 Answer: 
-I found 15 products with identical sentiment score of 0.9 and sentiment magnitude of 1.4:
-Some of these are listed below:
+I identified 15 products with identical sentiment scores of 0.9 and sentiment magnitudes of 1.4. Here are a couple of the products from the list:
+
 "Recycled Paper Journal Set"
 "Women's Long Sleeve Blended Cardigan Charcoal"
+Considering that both the sentiment score and sentiment magnitude are at 1.4, it seems there might not be a clear correlation or trend in the query. These values of 0.9 and 1.4 appear to be in the range of average performance according to open source results. Here are a few more products from the list:
 
-Since both sentiment score and sentiment magnitude is 1.4, I don't see a correlation nor trend in my question. 0.9 and 1.4 were at an average performance, according to open source results.
 "Tri-blend Hoodie Grey"
 "Infant Short Sleeve Tee Royal Blue"
-" Men's Short Sleeve Hero Tee Charcoal"
+"Men's Short Sleeve Hero Tee Charcoal"
