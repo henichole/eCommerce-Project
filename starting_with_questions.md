@@ -20,11 +20,9 @@ SQL Queries:
             --indicates the number of column of selected table
                 DESC;
                 
---Only one country returned, I switched the column to totaltransactionrevenue and got 
+--When I switched the column to "totaltransactionrevenue," I received the following result:
 
-Answer:
-Since the transactionrevenue has a high nullality, I checked through the Excel to see what happened: I realized that the reason behind it was because a lot of orderids were created without having a transaction revenue. Therefore, I think the column "transactionrevenue" is not that reliable or relevent. I
-use the totaltransactionrevenue instead and got a list of 6 cities from US and Canada, the top one is US, since a lot of the cities were missing, so it is a total of all null cities in the US.
+Answer: The high presence of null values in the "transactionrevenue" column prompted me to investigate further. Upon checking the data in Excel, I discovered that many order IDs were created without corresponding transaction revenues. As a result, I concluded that the "transactionrevenue" column might not be a reliable or relevant metric for analysis. I opted to use "totaltransactionrevenue" instead and obtained a list of 6 cities from the United States and Canada. The top-ranking city is the United States. Since many cities were missing, the result represents a sum of all null cities in the United States.
 
 Results:
 country              city              totaltransactionrevenue
@@ -54,7 +52,7 @@ SQL Queries:
               city
             HAVING AVG(CAST(productQuantity AS numeric)) IS NOT NULL;
 
---The average number of products ordered from visitors in each city and country are 1. But I don't feel right about this result, I tried to union the rows with same country and city name, along with the product quantity. 
+--The average number of products ordered from visitors in each city and country appears to be 1, but I have reservations about this result. To address my concerns, I attempted to combine the rows with the same country and city name, along with the product quantity.
 
             WITH deduplicated_all_sessions AS (
                 SELECT DISTINCT country, city, productQuantity
@@ -72,7 +70,7 @@ SQL Queries:
             HAVING 
                 AVG(CAST(productQuantity AS numeric)) IS NOT NULL;
             
---However, since most of the values under prduct quantity, there is no surprise that I got average order number of 1 for every country. I need to use total_ordered from sales_report using JOIN:
+--As expected, the average order number was consistently 1 for every country, given the many null values under the "product quantity." To obtain a more accurate average order number, I'll need to utilize the "total_ordered" from the "sales_report" by using a JOIN operation.
 
         WITH deduplicated_all_sessions AS (
             SELECT DISTINCT country, city, productSKU
@@ -91,7 +89,7 @@ SQL Queries:
             a.city
         HAVING 
             AVG(sr.total_ordered) IS NOT NULL;
---Here I got 83 rows, I then narrowed down to top 5 US cities:
+--Here I got 83 rows, I then refined it down to top 5 US cities:
 
         WITH deduplicated_all_sessions AS (
             SELECT DISTINCT country, city, productSKU
@@ -187,7 +185,7 @@ The top five product categories are:
 2. "Home/Apparel/Women's/Women's-T-Shirts/"
 3. "Home/Apparel/"
 
-Trends I see: For major cities in US and Canada, Home/Apparel is the most popular product category. However this one I don't see I did a good job, there must be something in the data cleaning process that I missed. Or, by all good means, if I did good enough, it's just the data to blame, since there are too many product categories.
+The trends I've observed are as follows: In major cities in the United States and Canada, the Home/Apparel product category appears to be the most popular. However, I'm uncertain about the accuracy of this finding. It's possible that I missed something during the data cleaning process. Alternatively, given the vast number of product categories, the data itself may be a contributing factor to the challenge in pinpointing the most popular category with certainty.
 
 
 **Question 4: What is the top-selling product from each city/country? Can we find any pattern worthy of noting in the products sold?**
